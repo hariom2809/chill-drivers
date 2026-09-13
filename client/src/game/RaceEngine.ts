@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { TextureHelper } from "three/examples/jsm/Addons.js";
 
 export class RaceEngine {
     private car: THREE.Object3D;
@@ -74,13 +73,13 @@ export class RaceEngine {
 
     getStats() {
         const totalTime = this.lapTimes.reduce(
-            (sum, lapTime) => sum + lapTime, 
+            (sum, lapTime) => sum + lapTime,
             0
         );
 
-        const average = this.lapTimes > 0 ? totalTime / this.lapTimes.length : 0;
+        const average = this.lapTimes.length > 0 ? totalTime / this.lapTimes.length : 0;
 
-        return {lapTimes: this.lapTimes, average};
+        return { lapTimes: this.lapTimes, average };
     }
     
 }

@@ -1,5 +1,5 @@
 export type RaceConfig = {
-    mode: "Solo" | "Multiplayer";
+    mode: "solo" | "multiplayer";
     totalLaps: number;
     isInfinite: boolean;
 };
@@ -8,9 +8,17 @@ export class SetupScreen {
     private container: HTMLDivElement;
     private lapContainer: HTMLDivElement;
 
-    constructor() {
+    constructor(onStart: (config: RaceConfig) => void) {
         this.container = document.createElement("div");
         this.container.id = "setup-screen";
+
+        this.container.style.position = "fixed";
+        this.container.style.top = "20px";
+        this.container.style.left = "20px";
+        this.container.style.zIndex = "9999";
+        this.container.style.backgroundColor = "white";
+        this.container.style.color = "black";
+        this.container.style.padding = "20px";
         
         const title = document.createElement("h1");
         title.textContent = "Race Setup";
@@ -23,7 +31,7 @@ export class SetupScreen {
         
         this.lapContainer = document.createElement("div");
         
-        this.container.appendChild(title);)
+        this.container.appendChild(title);
         this.container.appendChild(soloButton);
         this.container.appendChild(multiplayerButton);
         this.container.appendChild(this.lapContainer);
@@ -31,7 +39,7 @@ export class SetupScreen {
         document.body.appendChild(this.container);
 
         soloButton.addEventListener("click", () => {
-            this.showSoloOptions();
+            this.showSoloOptions(onStart);
         });
 
         multiplayerButton.addEventListener("click", () => {
@@ -39,7 +47,7 @@ export class SetupScreen {
         });
     }
 
-    private showSoloOptions() {
+    private showSoloOptions(onStart: (config: RaceConfig) => void) {
         this.lapContainer.innerHTML = "";
 
         const heading = document.createElement("h2");
@@ -48,10 +56,10 @@ export class SetupScreen {
         this.lapContainer.appendChild(heading);
 
         const lapOptions = [
-            {text: "3 Laps", totalLaps 3, isInfinite: false},
-            {text: "5 Laps", totalLaps 3, isInfinite: false},
-            {text: "10 Laps", totalLaps 3, isInfinite: false},
-            {text: "Infinite", totalLaps 0, isInfinite: true},
+            {text: "3 Laps", totalLaps: 3, isInfinite: false},
+            {text: "5 Laps", totalLaps: 5, isInfinite: false},
+            {text: "10 Laps", totalLaps: 10, isInfinite: false},
+            {text: "Infinite", totalLaps: 0, isInfinite: true},
         ];
 
         lapOptions.forEach((option) => {
@@ -59,11 +67,11 @@ export class SetupScreen {
             button.textContent = option.text;
 
             button.addEventListener("click", () => {
-                console.log("Race Conifd", {
+                onStart({
                     mode: "solo",
                     totalLaps: option.totalLaps,
                     isInfinite: option.isInfinite,
-                })
+                });
             });
 
             this.lapContainer.appendChild(button);
