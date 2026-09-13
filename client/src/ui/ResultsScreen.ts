@@ -18,7 +18,7 @@ export class ResultsScreen {
         this.container.style.display = "flex";
         this.container.style.flexDirection = "column";
         this.container.style.alignItems = "center";
-        this.container.stylele.justifyContent = "center";
+        this.container.style.justifyContent = "center";
 
         const title = document.createElement("h2");
         title.textContent = "Race Result";

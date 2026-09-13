@@ -9,6 +9,7 @@ export class RenderLoop {
     private carController: CarController;
     private keyPassed: Set<string>;
     private raceEngine: RaceEngine;
+    private onRaceComplete: () => void;
 
     private previousTime = 0;
     private readonly cameraOffset = new THREE.Vector3(0, 6, -10);
@@ -19,7 +20,8 @@ export class RenderLoop {
         camera: THREE.PerspectiveCamera,
         carController: CarController,
         keyPassed: Set<string>,
-        raceEngine: RaceEngine
+        raceEngine: RaceEngine,
+        onRaceComplete: () => void
     ) {
         this.renderer = renderer;
         this.scene = scene;
@@ -27,6 +29,7 @@ export class RenderLoop {
         this.carController = carController;
         this.keyPassed = keyPassed;
         this.raceEngine = raceEngine;
+        this.onRaceComplete = onRaceComplete;
     }
 
     start() {
@@ -42,6 +45,11 @@ export class RenderLoop {
         this.carController.handleInput(this.keyPassed);
         this.carController.update(deltaTime);
         this.raceEngine.update();
+
+        if (this.raceEngine.isRaceComplete()) {
+            this.onRaceComplete();
+            return;
+        }
 
         this.updateCamera();
 
