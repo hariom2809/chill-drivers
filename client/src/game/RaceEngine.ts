@@ -64,4 +64,23 @@ export class RaceEngine {
 
         this.previousZ = currentZ;
     }
+
+    isRaceComplete(): boolean{
+        if (this.isInfinite) {
+            return false;
+        }
+        return this.currentLap > this.totalLaps;
+    }
+
+    getStats() {
+        const totalTime = this.lapTimes.reduce(
+            (sum, lapTime) => sum + lapTime, 
+            0
+        );
+
+        const average = this.lapTimes > 0 ? totalTime / this.lapTimes.length : 0;
+
+        return {lapTimes: this.lapTimes, average};
+    }
+    
 }
