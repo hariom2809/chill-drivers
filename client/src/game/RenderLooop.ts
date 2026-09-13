@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { CarController} from "./CarController";
+import { RaceEngine } from "./RaceEngine";
 
 export class RenderLoop {
     private renderer: THREE.WebGLRenderer;
@@ -7,6 +8,7 @@ export class RenderLoop {
     private camera: THREE.PerspectiveCamera;
     private carController: CarController;
     private keyPassed: Set<string>;
+    private raceEngine: RaceEngine;
 
     private previousTime = 0;
     private readonly cameraOffset = new THREE.Vector3(0, 6, -10);
@@ -16,13 +18,15 @@ export class RenderLoop {
         scene: THREE.Scene,
         camera: THREE.PerspectiveCamera,
         carController: CarController,
-        keyPassed: Set<string>
+        keyPassed: Set<string>,
+        raceEngine: RaceEngine
     ) {
         this.renderer = renderer;
         this.scene = scene;
         this.camera = camera;
         this.carController = carController;
         this.keyPassed = keyPassed;
+        this.raceEngine = raceEngine;
     }
 
     start() {
@@ -37,6 +41,7 @@ export class RenderLoop {
 
         this.carController.handleInput(this.keyPassed);
         this.carController.update(deltaTime);
+        this.raceEngine.update();
 
         this.updateCamera();
 
