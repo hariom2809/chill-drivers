@@ -4,6 +4,7 @@ export class CarController {
     position: THREE.Vector3;
     rotation: number;
     speed: number;
+    mesh: THREE.Mesh;
 
     private acceleration = 10;
     private maxSpeed = 30;
@@ -18,9 +19,14 @@ export class CarController {
     };
 
     constructor() {
-        this.position   = new THREE.Vector3(0, 0, 0);
+        this.position   = new THREE.Vector3(0, 0.5, 0);
         this.rotation   = 0;
         this.speed      = 0;
+
+        const geometry = new THREE.BoxGeometry(2, 1, 4);
+        const material = new THREE.MeshStandardMaterial({ color: 0xff3333 });
+        this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.position.copy(this.position);
     }
 
     handleInput (keys: Set<string>) {
@@ -38,7 +44,7 @@ export class CarController {
             this.speed -= this.acceleration * deltaTime; 
         }
 
-        this.speed = Math.min(this.speed , this.maxSpeed);
+        this.speed = Math.max(Math.min(this.speed, this.maxSpeed), -this.maxSpeed);
 
         if (!this.input.accelerate && !this.input.break) {
             this.speed *= this.drag;
@@ -60,5 +66,8 @@ export class CarController {
         );
 
         this.position.add( direction.multiplyScalar( this.speed * deltaTime) );
+
+        this.mesh.position.copy(this.position);
+        this.mesh.rotation.y = this.rotation;
     }
 }
