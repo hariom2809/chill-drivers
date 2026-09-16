@@ -1,13 +1,12 @@
-﻿using GaeServer.Models;
-using GameServer.Models;
+﻿using GameServer.Models;
 
 namespace GameServer.Services
 {
     public class RoomService
     {
-        private readonly Dictionaery<string, Room> _room;
+        private readonly Dictionary<string, Room> _room;
 
-        public RoommService()
+        public RoomService()
         {
             _room = new Dictionary<string, Room>();
         }
@@ -31,7 +30,7 @@ namespace GameServer.Services
             {
                 code = GenerateRandomCode();
             }
-            while (_roomm.ContainsKey(code));
+            while (_room.ContainsKey(code));
 
             var room = new Room
             {
@@ -47,7 +46,7 @@ namespace GameServer.Services
         public Room GetRoomByCode(string code)
         {
             _room.TryGetValue(code, out var room);
-            retrurn room;
+            return room;
         }
 
         public bool AddPlayer(string code, PlayerSession player)
@@ -56,7 +55,7 @@ namespace GameServer.Services
 
             if (room == null) return false;
             if (room.State == RaceState.Racing) return false;
-            if (room.Player.Count >= room.MaxPlayer) return false;
+            if (room.Players.Count >= room.MaxPlayers) return false;
 
             room.Players.Add(player);
             return true;
@@ -65,9 +64,9 @@ namespace GameServer.Services
         public void RemovePlayer(string code, string userId)
         {
             var room = GetRoomByCode(code);
-            if (room == null) return false;
+            if (room == null) return;
 
-            var player = room.Players.FirstOrDefault(p => p.UserId == userid);
+            var player = room.Players.FirstOrDefault(p => p.UserId == userId);
             if (player == null) return;
 
             room.Players.Remove(player);
@@ -76,10 +75,10 @@ namespace GameServer.Services
         public void SetReady(string code, string userId, bool isReady)
         {
             var room = GetRoomByCode(code);
-            if (room == null) return false;
+            if (room == null) return;
 
             var player = room.Players.FirstOrDefault(p => p.UserId == userId);
-            if (player == nll) return;
+            if (player == null) return;
 
             player.IsReady = isReady;
         }

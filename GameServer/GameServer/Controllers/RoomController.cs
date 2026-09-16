@@ -38,7 +38,7 @@ namespace GameServer.Controllers
             return Ok(new
             {
                 code = room.Code,
-                state = rooom.State,
+                state = room.State,
                 playerCount = room.Players.Count,
                 players = room.Players.Select(p => new
                 {

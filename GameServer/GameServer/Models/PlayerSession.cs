@@ -1,4 +1,4 @@
-namespace GaeServer.Models
+namespace GameServer.Models
 {
     public class PlayerSession
     {

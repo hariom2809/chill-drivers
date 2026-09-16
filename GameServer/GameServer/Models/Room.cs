@@ -1,4 +1,6 @@
-﻿namespace GameServer.Models
+﻿using GameServer.Models;
+
+namespace GameServer.Models
 {
     public enum RaceState
     {

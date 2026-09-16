@@ -1,3 +1,6 @@
+using GameServer.Services;
+using GameServer.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,8 +9,26 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+builder.Services.AddSingleton<RoomService>();
+builder.Services.AddSignalR();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Client", policy =>
+    {
+        policy
+            .WithOrigins("http//localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
+
+app.UseCors("Client");
+app.MapControllers();
+app.MapHub<RaceHub>("/hubs/race");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
