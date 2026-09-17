@@ -27,7 +27,7 @@ namespace GameServer.Controllers
             });
         }
 
-        [HttpGet("{code")]
+        [HttpGet("{code}")]
         public ActionResult GetRoom(string code)
         {
             var room = _roomService.GetRoomByCode(code);
